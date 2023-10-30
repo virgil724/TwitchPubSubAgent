@@ -10,7 +10,7 @@ class BitsEvent(BaseModel):
     user_id: int = None
     channel_name: str
     bits_used: int
-    total_bits_used: int
+    total_bits_used: int = None
 
 
 class SubEvent(BaseModel):
@@ -18,8 +18,8 @@ class SubEvent(BaseModel):
     user_id: int = None
     channel_name: str
     is_gift: bool
-    cumulative_months: int
-    streak_months: int
+    cumulative_months: int = None
+    streak_months: int = None
     multi_month_duration: int
     sub_plan: str
 
@@ -27,8 +27,9 @@ class SubEvent(BaseModel):
 # import twisted.internet._sslverify as v
 # v.platformTrust = lambda : None
 load_dotenv()
-ROOTURL=os.getenv("ROOTURL")
+ROOTURL = os.getenv("ROOTURL")
 APIKEY = os.getenv("APIKEY")
+
 
 def upload_bits_event(reactor, Bits: BitsEvent):
     try_count = 0
