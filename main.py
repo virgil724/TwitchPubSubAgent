@@ -92,7 +92,8 @@ class TwitchPubSubProtocol(WebSocketClientProtocol):
                     topic = data["data"]["topic"]
                     handler = self.topic_dict[topic]["func"]
                     model = self.topic_dict[topic]["model"]
-                    handler(self.factory.reactor, model(**data["data"]["message"]))
+                    message = json.loads(data["data"]["message"])
+                    handler(self.factory.reactor, model(**message))
                 except Exception as e:
                     print(f"Error Message: {e}")
                     pass
