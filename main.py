@@ -93,6 +93,8 @@ class TwitchPubSubProtocol(WebSocketClientProtocol):
                     handler = self.topic_dict[topic]["func"]
                     model = self.topic_dict[topic]["model"]
                     message = json.loads(data["data"]["message"])
+                    if "channel-bits-events-v2" in topic:
+                        message = message["data"]
                     handler(self.factory.reactor, model(**message))
                 except Exception as e:
                     print(f"Error Message: {e}")
