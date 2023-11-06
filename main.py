@@ -98,12 +98,17 @@ class TwitchPubSubProtocol(WebSocketClientProtocol):
                 except Exception as e:
                     print(f"Error Message: {e}")
                     pass
+            elif data["type"] == "PONG":
+                pass
+            elif data["type"] == "RESPONSE":
+                pass
             elif data["type"] == "RECONNECT":
                 self.factory.reconnect()
             elif data["type"] == "AUTH_REVOKED":
                 self.factory.NotReconnect()
                 # TODO 晚點再做
                 pass
+      
             else:
                 self.factory.NotReconnect()
 

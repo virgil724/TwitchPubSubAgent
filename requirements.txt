@@ -1,0 +1,7 @@
+autobahn==23.6.2
+pydantic==2.4.2
+pydantic_core==2.10.1
+treq==22.2.0
+Twisted==23.8.0
+watchfiles==0.21.0
+python-dotenv==1.0.0
