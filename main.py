@@ -51,7 +51,6 @@ class TwitchPubSubProtocol(WebSocketClientProtocol):
                 }
 
     def onOpen(self):
-        self.factory.continueTrying = 0
         print("WebSocket connection open.")
 
         def addSub():
@@ -102,8 +101,11 @@ class TwitchPubSubProtocol(WebSocketClientProtocol):
             elif data["type"] == "RECONNECT":
                 self.factory.reconnect()
             elif data["type"] == "AUTH_REVOKED":
+                self.factory.NotReconnect()
                 # TODO 晚點再做
                 pass
+            else:
+                self.factory.NotReconnect()
 
 
 from autobahn.websocket import protocol
@@ -169,6 +171,11 @@ class CustomWebSocketFactory(WebSocketClientFactory, ReconnectingClientFactory):
         print("Received reconnect request, reconnecting...")
 
         self.continueTrying = 1
+
+    def NotReconnect(self):
+        print("Problem Occur Not Reconnected")
+
+        self.continueTrying = 0
 
 
 if __name__ == "__main__":
