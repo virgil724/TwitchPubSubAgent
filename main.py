@@ -1,4 +1,6 @@
-import json, argparse, sys
+import json
+import argparse
+import sys
 
 from autobahn.twisted.websocket import (
     WebSocketClientFactory,
@@ -11,7 +13,13 @@ from twisted.internet import reactor, ssl
 from twisted.internet.protocol import ReconnectingClientFactory
 from twisted.web.client import Agent
 
-from upload_event import BitsEvent, SubEvent, upload_bits_event, upload_subscription
+from upload_event import (
+    BitsEvent,
+    SubEvent,
+    upload_bits_event,
+    upload_subscription,
+    refresh_token,
+)
 
 
 class TwitchPubSubProtocol(WebSocketClientProtocol):
@@ -101,6 +109,9 @@ class TwitchPubSubProtocol(WebSocketClientProtocol):
             elif data["type"] == "PONG":
                 pass
             elif data["type"] == "RESPONSE":
+                if data["error"] == "ERR_BADAUTH":
+                    self.factory.NotReconnect()
+                    refresh_token(self.factory.reactor, token=self.auth_token)
                 pass
             elif data["type"] == "RECONNECT":
                 self.factory.reconnect()

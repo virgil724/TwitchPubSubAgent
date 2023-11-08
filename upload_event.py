@@ -1,5 +1,6 @@
 import os
-import random, treq
+import random
+import treq
 from twisted.internet.task import react
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -86,8 +87,28 @@ def upload_subscription(reactor, Sub: SubEvent):
     return d
 
 
-def refresh_token(token):
-    pass
+def refresh_token(reactor, token: str):
+    try_count = 0
+
+    def handle_error(failure):
+        nonlocal try_count
+        try_count += 1
+        if try_count < 3:
+            delay = random.randint(5, 15)
+            print(f"Retry {try_count} in {delay} seconds")
+            reactor.callLater(delay, refresh_token, token)
+        else:
+            print("Request failed after 3 tries")
+
+    url = f"{ROOTURL}/functions/v1/oauth_flow"
+    headers = {
+        "user-agent": "TwitchSubAgent",
+        "apikey": APIKEY,
+        "authorization": f"Bearer {APIKEY}",
+        "content-type": "application/json",
+    }
+    d = treq.post(url, json={"oldtoken": token}, headers=headers)
+    d.addErrback(handle_error)
 
 
 if __name__ == "main":
