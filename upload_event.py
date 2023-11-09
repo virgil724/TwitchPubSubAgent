@@ -100,7 +100,7 @@ def refresh_token(reactor, token: str):
         else:
             print("Request failed after 3 tries")
 
-    url = f"{ROOTURL}/functions/v1/oauth_flow"
+    url = f"{ROOTURL}/functions/v1/oauth_flow/refresh"
     headers = {
         "user-agent": "TwitchSubAgent",
         "apikey": APIKEY,
