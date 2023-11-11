@@ -107,8 +107,9 @@ def refresh_token(reactor, token: str):
         "authorization": f"Bearer {APIKEY}",
         "content-type": "application/json",
     }
-    d = treq.post(url, json={"oldtoken": token}, headers=headers)
+    d = treq.post(url, json={"oldToken": token}, headers=headers)
     d.addErrback(handle_error)
+    return d
 
 
 if __name__ == "main":
